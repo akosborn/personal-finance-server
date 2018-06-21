@@ -1,12 +1,11 @@
 package com.osbornandrew.personal.finance.server;
 
+import com.google.common.collect.Sets;
 import com.osbornandrew.personal.finance.server.accounts.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashSet;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/wallet")
@@ -41,16 +40,10 @@ public class WalletController
                 4000,
                 25,
                 1.5f);
-        Set<Account> accounts = new HashSet<>();
-        accounts.add(chk);
-        accounts.add(svg);
-        accounts.add(inv);
-        accounts.add(loan);
-        accounts.add(cc);
-
         return new Wallet(
                 "Primary",
                 "My primary wallet",
-                accounts);
+                Sets.newHashSet(chk), Sets.newHashSet(svg), Sets.newHashSet(loan),
+                Sets.newHashSet(cc), Sets.newHashSet(inv));
     }
 }
