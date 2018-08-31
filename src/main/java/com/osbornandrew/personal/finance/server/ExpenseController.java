@@ -33,30 +33,6 @@ public class ExpenseController {
     public String testPostToken(@RequestBody String body,
                                 @RequestHeader HttpHeaders headers) {
 
-        String userId, email, name = "", locale;
-        String idTokenString = headers.get("token").get(0);
-
-        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
-                new NetHttpTransport(), new JacksonFactory())
-                .setAudience(Collections.singletonList("4146647642-k52cqa8q4csm2d866nl51ic4kc6hu5ve.apps.googleusercontent.com"))
-                .build();
-
-        try {
-            GoogleIdToken idToken = verifier.verify(idTokenString);
-            if (idToken != null) {
-                GoogleIdToken.Payload payload = idToken.getPayload();
-                userId = payload.getSubject();
-                email = payload.getEmail();
-                name = (String) payload.get("name");
-                locale = (String) payload.get("locale");
-            }
-
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return name;
+        return null;
     }
 }
