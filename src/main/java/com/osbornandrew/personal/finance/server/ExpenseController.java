@@ -1,22 +1,16 @@
 package com.osbornandrew.personal.finance.server;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.common.collect.Sets;
 import com.osbornandrew.personal.finance.server.transactions.Expense;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/api/expenses")
-@CrossOrigin(origins = { "http://localhost:4200" })
 public class ExpenseController {
 
     @RequestMapping("")
@@ -30,9 +24,9 @@ public class ExpenseController {
     }
 
     @RequestMapping(value = "/token", method = RequestMethod.POST)
-    public String testPostToken(@RequestBody String body,
-                                @RequestHeader HttpHeaders headers) {
+    public Map testPostToken(@RequestBody String body,
+                             @RequestHeader HttpHeaders headers) {
 
-        return null;
+        return Collections.singletonMap("response", headers.get("Authorization").get(0));
     }
 }

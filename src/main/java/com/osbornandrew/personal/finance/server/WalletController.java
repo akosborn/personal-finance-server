@@ -13,7 +13,6 @@ import java.util.Set;
 @Secured("ROLE_USER")
 @RestController
 @RequestMapping("/api/wallet")
-@CrossOrigin(origins = {"http://localhost:4200"})
 public class WalletController
 {
     @RequestMapping("")

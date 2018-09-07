@@ -16,6 +16,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable(); // TODO: 8/19/2018 Remove before deploying
         http
+                .cors() // TODO: 9/6/2018 Remove before deploying. Find way to host
+                .and()
                 .authorizeRequests()
                 .anyRequest().authenticated() // Every request requires authentication
                 .and()
