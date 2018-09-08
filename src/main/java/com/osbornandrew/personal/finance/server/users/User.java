@@ -5,7 +5,13 @@ import lombok.Setter;
 
 public class User {
 
-    public User() {}
+    public User(String displayName, String email,
+                String socialId, SocialProvider provider) {
+        this.displayName = displayName;
+        this.email = email;
+        this.socialId = socialId;
+        this.provider = provider;
+    }
 
     @Getter
     private Long id;
@@ -23,9 +29,15 @@ public class User {
     @Getter @Setter
     private String email;
     /**
+     * Unique for each provider
      * Google: id
      * Twitter: id_str
      * */
     @Getter @Setter
     private String socialId;
+    /**
+     * Enum field
+     */
+    @Getter @Setter
+    private SocialProvider provider;
 }

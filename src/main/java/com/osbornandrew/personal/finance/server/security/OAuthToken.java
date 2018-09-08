@@ -3,37 +3,35 @@ package com.osbornandrew.personal.finance.server.security;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.security.Principal;
 import java.util.Collection;
 
 public class OAuthToken extends AbstractAuthenticationToken {
 
-    @Getter @Setter
-    private String provider;
-
-    @Getter @Setter
-    private String userId;
-
-    @Getter @Setter
-    private String name;
-
-    public OAuthToken(String provider, String userId, String name,
-                      Collection<? extends GrantedAuthority> authorities) {
+    OAuthToken(Object principal,
+               Collection<? extends GrantedAuthority> authorities,
+               Object authToken) {
         super(authorities);
-        this.provider = provider;
-        this.userId = userId;
-        this.name = name;
+        this.principal = principal;
+        this.authToken = authToken;
         setAuthenticated(true);
     }
 
+    @Getter
+    private final Object principal;
+    private Object authToken;
+
     @Override
     public Object getCredentials() {
-        return null;
+        return authToken;
     }
 
     @Override
     public Object getPrincipal() {
-        return name;
+        return principal;
     }
 }

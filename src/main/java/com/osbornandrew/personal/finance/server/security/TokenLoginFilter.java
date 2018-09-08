@@ -4,12 +4,15 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.osbornandrew.personal.finance.server.users.MyUserDetails;
+import com.osbornandrew.personal.finance.server.users.SocialProvider;
+import com.osbornandrew.personal.finance.server.users.User;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.cors.CorsUtils;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -17,7 +20,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -53,10 +55,17 @@ public class TokenLoginFilter extends GenericFilterBean {
                 // Check if ID in database
                 // If so, retrieve from db and create auth object
                 // If not, save to database
+
+                UserDetails userDetails = new MyUserDetails(
+                        new User((String) payload.get("name"),
+                                payload.getEmail(),
+                                payload.getSubject(),
+                                SocialProvider.GOOGLE)
+                );
                 
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-                Authentication auth = new OAuthToken("Google", payload.getSubject(), (String) payload.get("name"), authorities);
+                Authentication auth = new OAuthToken(userDetails, authorities, idToken);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
             
