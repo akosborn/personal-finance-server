@@ -1,13 +1,9 @@
-package com.osbornandrew.personal.finance.server.security;
+package com.osbornandrew.personalfinance.security;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.security.Principal;
 import java.util.Collection;
 
 public class OAuthToken extends AbstractAuthenticationToken {

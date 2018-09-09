@@ -1,4 +1,4 @@
-package com.osbornandrew.personal.finance.server.security;
+package com.osbornandrew.personalfinance.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

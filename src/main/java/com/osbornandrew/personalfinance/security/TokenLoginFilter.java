@@ -1,18 +1,19 @@
-package com.osbornandrew.personal.finance.server.security;
+package com.osbornandrew.personalfinance.security;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.osbornandrew.personal.finance.server.users.MyUserDetails;
-import com.osbornandrew.personal.finance.server.users.SocialProvider;
-import com.osbornandrew.personal.finance.server.users.User;
+import com.osbornandrew.personalfinance.MyUserDetails;
+import com.osbornandrew.personalfinance.SocialProvider;
+import com.osbornandrew.personalfinance.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -27,6 +28,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class TokenLoginFilter extends GenericFilterBean {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -56,12 +59,16 @@ public class TokenLoginFilter extends GenericFilterBean {
                 // If so, retrieve from db and create auth object
                 // If not, save to database
 
-                UserDetails userDetails = new MyUserDetails(
+                MyUserDetails userDetails = new MyUserDetails(
                         new User((String) payload.get("name"),
                                 payload.getEmail(),
                                 payload.getSubject(),
                                 SocialProvider.GOOGLE)
                 );
+
+                log.info("Created {} user {}",
+                        userDetails.getUser().getProvider(),
+                        userDetails.getUser().getDisplayName());
                 
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority("ROLE_USER"));

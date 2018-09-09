@@ -1,6 +1,6 @@
-package com.osbornandrew.personal.finance.server;
+package com.osbornandrew.personalfinance;
 
-import com.osbornandrew.personal.finance.server.accounts.*;
+import com.osbornandrew.personalfinance.accounts.*;
 import lombok.Getter;
 import lombok.Setter;
 

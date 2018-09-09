@@ -1,7 +1,7 @@
-package com.osbornandrew.personal.finance.server;
+package com.osbornandrew.personalfinance;
 
 import com.google.common.collect.Sets;
-import com.osbornandrew.personal.finance.server.transactions.Expense;
+import com.osbornandrew.personalfinance.transactions.Expense;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 

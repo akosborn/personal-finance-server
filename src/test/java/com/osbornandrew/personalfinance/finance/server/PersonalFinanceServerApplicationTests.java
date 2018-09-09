@@ -1,4 +1,4 @@
-package com.osbornandrew.personal.finance.server;
+package com.osbornandrew.personalfinance.finance.server;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

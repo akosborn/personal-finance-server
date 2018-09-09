@@ -1,5 +1,7 @@
-package com.osbornandrew.personal.finance.server.users;
+package com.osbornandrew.personalfinance;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,6 +17,7 @@ public class MyUserDetails implements UserDetails {
         this.user = user;
     }
 
+    @Getter @Setter
     private User user;
 
     @Override
