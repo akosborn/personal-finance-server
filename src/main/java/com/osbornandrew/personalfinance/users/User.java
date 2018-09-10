@@ -1,9 +1,16 @@
-package com.osbornandrew.personalfinance;
+package com.osbornandrew.personalfinance.users;
 
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class User {
+
+    public User() {}
 
     public User(String displayName, String email,
                 String socialId, SocialProvider provider) {
@@ -13,7 +20,7 @@ public class User {
         this.provider = provider;
     }
 
-    @Getter
+    @Id @GeneratedValue @Getter
     private Long id;
     /**
      * Ex: "Andrew Osborn"

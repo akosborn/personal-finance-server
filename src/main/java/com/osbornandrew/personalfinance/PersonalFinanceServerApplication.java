@@ -1,7 +1,9 @@
 package com.osbornandrew.personalfinance;
 
+import com.osbornandrew.personalfinance.security.TokenLoginFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 
 @SpringBootApplication
 public class PersonalFinanceServerApplication {
