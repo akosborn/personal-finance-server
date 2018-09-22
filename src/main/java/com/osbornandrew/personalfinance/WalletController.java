@@ -1,6 +1,5 @@
 package com.osbornandrew.personalfinance;
 
-import com.osbornandrew.personalfinance.accounts.*;
 import com.osbornandrew.personalfinance.users.MyUserDetails;
 import com.osbornandrew.personalfinance.users.MyUserService;
 import com.osbornandrew.personalfinance.users.User;
@@ -12,22 +11,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 
 @Secured("ROLE_USER")
 @RestController
 @RequestMapping("/api/wallet")
 public class WalletController
 {
-    private WalletService walletService;
     private MyUserService userService;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public WalletController(WalletService walletService, MyUserService userService) {
-        this.walletService = walletService;
+    public WalletController(MyUserService userService) {
         this.userService = userService;
     }
 
