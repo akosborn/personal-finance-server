@@ -28,16 +28,14 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-@Component
 public class TokenLoginFilter extends GenericFilterBean {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private MyUserService userService;
 
-    public TokenLoginFilter(MyUserService userService) {
+    TokenLoginFilter(MyUserService userService) {
         this.userService = userService;
     }
 
@@ -85,7 +83,8 @@ public class TokenLoginFilter extends GenericFilterBean {
                                             return user;
                                         })
                 );
-                
+
+                // TODO: 9/9/2018 Find cleaner way to add authorities to a user
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
                 Authentication auth = new OAuthToken(userDetails, authorities, idToken);
