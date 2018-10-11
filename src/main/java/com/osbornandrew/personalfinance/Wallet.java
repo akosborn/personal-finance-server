@@ -32,27 +32,7 @@ public class Wallet {
     @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"wallet"})
     @Getter @Setter
-    private Set<CheckingAccount> checkingAccounts;
-
-    @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties({"wallet"})
-    @Getter @Setter
-    private Set<SavingsAccount> savingsAccounts;
-
-    @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties({"wallet"})
-    @Getter @Setter
-    private Set<Loan> loans;
-
-    @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties({"wallet"})
-    @Getter @Setter
-    private Set<CreditCard> creditCards;
-
-    @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties({"wallet"})
-    @Getter @Setter
-    private Set<Investment> investments;
+    private Set<Account> accounts;
 
     public Wallet() { }
 
@@ -60,16 +40,10 @@ public class Wallet {
         this.user = user;
     }
 
-    public Wallet(String name, String description, Set<CheckingAccount> checkingAccounts,
-                  Set<SavingsAccount> savingsAccounts, Set<Loan> loans,
-                  Set<CreditCard> creditCards, Set<Investment> investments) {
+    public Wallet(String name, String description, Set<Account> accounts) {
 
         this.name = name;
         this.description = description;
-        this.checkingAccounts = checkingAccounts;
-        this.savingsAccounts = savingsAccounts;
-        this.loans = loans;
-        this.creditCards = creditCards;
-        this.investments = investments;
+        this.accounts = accounts;
     }
 }
