@@ -20,7 +20,7 @@ public abstract class Account {
     private AccountType type;
 
     @ManyToOne
-    @JsonIgnoreProperties({"checkingAccounts", "savingsAccounts", "creditCards", "loans"})
+    @JsonIgnoreProperties({"checkingAccounts", "savingsAccounts", "creditCards", "loans", "investments"})
     @Getter @Setter
     private Wallet wallet;
 

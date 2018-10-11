@@ -12,7 +12,9 @@ import java.util.Set;
 @Entity
 public class Wallet {
 
-    @Id @GeneratedValue @Getter @Setter private Long id;
+    @Id @GeneratedValue
+    @Getter @Setter
+    private Long id;
 
     @OneToOne
     @JsonIgnoreProperties({"wallet"})
@@ -38,7 +40,8 @@ public class Wallet {
     @JsonIgnoreProperties({"wallet"})
     @Getter @Setter private Set<CreditCard> creditCards;
 
-    @Transient
+    @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"wallet"})
     @Getter @Setter private Set<Investment> investments;
 
     public Wallet() { }

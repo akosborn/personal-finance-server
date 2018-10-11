@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 @Entity
 public class Loan extends Account {
 
+    public Loan() { }
+
     @Getter @Setter private float interestRate;
     @Getter @Setter private double minPayment;
 
