@@ -2,6 +2,7 @@ package com.osbornandrew.personalfinance;
 
 import com.google.common.collect.Sets;
 import com.osbornandrew.personalfinance.accounts.CheckingAccount;
+import com.osbornandrew.personalfinance.users.AccountService;
 import com.osbornandrew.personalfinance.users.MyUserDetails;
 import com.osbornandrew.personalfinance.users.User;
 import org.slf4j.Logger;
@@ -25,11 +26,14 @@ public class CheckingController {
 
     private WalletService walletService;
     private CheckingService checkingService;
+    private AccountService acctService;
 
     @Autowired
-    public CheckingController(WalletService walletService, CheckingService checkingService) {
+    public CheckingController(WalletService walletService, CheckingService checkingService,
+                              AccountService acctService) {
         this.walletService = walletService;
         this.checkingService = checkingService;
+        this.acctService = acctService;
     }
 
     @PostMapping("")
@@ -39,7 +43,7 @@ public class CheckingController {
                 .getAuthentication().getPrincipal()).getUser();
         Wallet wallet = walletService.loadByUser(user);
         account.setWallet(wallet);
-        CheckingAccount savedAcct = checkingService.save(account);
+        CheckingAccount savedAcct = (CheckingAccount) acctService.save(account);
         log.info("Saved user (ID {}) checking account (ID {}) '{}' ", user.getId(),
                 savedAcct.getId(), savedAcct.getName());
 

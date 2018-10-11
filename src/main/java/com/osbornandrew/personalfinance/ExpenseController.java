@@ -1,6 +1,5 @@
 package com.osbornandrew.personalfinance;
 
-import com.google.common.collect.Sets;
 import com.osbornandrew.personalfinance.transactions.Expense;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +14,7 @@ public class ExpenseController {
 
     @RequestMapping("")
     public Set<Expense> getExpenses() {
-
-        return Sets.newHashSet(
-                new Expense("Bell's", 19.45),
-                new Expense("Taco Bell", 4.65),
-                new Expense("States Golf Course", 10.75),
-                new Expense("Gun Lake Casino", 23));
+        return null;
     }
 
     @RequestMapping(value = "/token", method = RequestMethod.POST)

@@ -10,12 +10,12 @@ import javax.persistence.Entity;
 @Entity
 public class SavingsAccount extends Account {
 
+    @Getter @Setter
+    private float interestRate;
+
     public SavingsAccount() {
         super();
     }
-
-    @Getter @Setter
-    private float interestRate;
 
     @JsonCreator
     public SavingsAccount(@JsonProperty("name") String name,

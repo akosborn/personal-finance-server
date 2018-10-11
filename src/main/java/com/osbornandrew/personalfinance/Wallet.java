@@ -2,6 +2,8 @@ package com.osbornandrew.personalfinance;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.osbornandrew.personalfinance.accounts.*;
+import com.osbornandrew.personalfinance.transactions.Expense;
+import com.osbornandrew.personalfinance.transactions.Income;
 import com.osbornandrew.personalfinance.users.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,28 +23,36 @@ public class Wallet {
     @Getter @Setter
     private User user;
 
-    @Getter @Setter private String name;
-    @Getter @Setter private String description;
+    @Getter @Setter
+    private String name;
+
+    @Getter @Setter
+    private String description;
 
     @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"wallet"})
-    @Getter @Setter private Set<CheckingAccount> checkingAccounts;
+    @Getter @Setter
+    private Set<CheckingAccount> checkingAccounts;
 
     @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"wallet"})
-    @Getter @Setter private Set<SavingsAccount> savingsAccounts;
+    @Getter @Setter
+    private Set<SavingsAccount> savingsAccounts;
 
     @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"wallet"})
-    @Getter @Setter private Set<Loan> loans;
+    @Getter @Setter
+    private Set<Loan> loans;
 
     @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"wallet"})
-    @Getter @Setter private Set<CreditCard> creditCards;
+    @Getter @Setter
+    private Set<CreditCard> creditCards;
 
     @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"wallet"})
-    @Getter @Setter private Set<Investment> investments;
+    @Getter @Setter
+    private Set<Investment> investments;
 
     public Wallet() { }
 

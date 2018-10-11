@@ -10,11 +10,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Set;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Account {
-
-    public Account() {
-    }
 
     @Getter
     private AccountType type;
@@ -38,13 +36,17 @@ public abstract class Account {
     @Getter @Setter
     private double balance;
 
-    @Transient
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"account"})
     @Getter @Setter
     private Set<Expense> expenses;
 
-    @Transient
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"account"})
     @Getter @Setter
     private Set<Income> incomes;
+
+    public Account() { }
 
     public Account(String name, String description, double balance, AccountType type) {
 
