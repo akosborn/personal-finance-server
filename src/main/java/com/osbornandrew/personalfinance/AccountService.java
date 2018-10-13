@@ -1,4 +1,4 @@
-package com.osbornandrew.personalfinance.users;
+package com.osbornandrew.personalfinance;
 
 import com.osbornandrew.personalfinance.AccountRepository;
 import com.osbornandrew.personalfinance.accounts.Account;
@@ -15,5 +15,9 @@ public class AccountService {
 
     public Account save(Account account) {
         return repo.save(account);
+    }
+
+    public Account loadByUserAndId(Long id, Long userId) {
+        return repo.findByIdAndWallet_User_Id(id, userId);
     }
 }

@@ -1,6 +1,8 @@
 package com.osbornandrew.personalfinance.transactions;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.osbornandrew.personalfinance.accounts.Account;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +36,16 @@ public class Expense {
     private Account account;
 
     public Expense() { }
+
+    @JsonCreator
+    public Expense(@JsonProperty("date") String date,
+                   @JsonProperty("description") String description,
+                   @JsonProperty("amount") double amount) {
+        // TODO: 10/12/2018 Parse actual date once client side pattern is defined
+        this.date = LocalDate.now();
+        this.description = description;
+        this.amount = amount;
+    }
 
     public Expense(LocalDate date, String description, double amount) {
 
