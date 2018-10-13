@@ -1,8 +1,6 @@
 package com.osbornandrew.personalfinance;
 
-import com.google.common.collect.Sets;
 import com.osbornandrew.personalfinance.accounts.CheckingAccount;
-import com.osbornandrew.personalfinance.users.AccountService;
 import com.osbornandrew.personalfinance.users.MyUserDetails;
 import com.osbornandrew.personalfinance.users.User;
 import org.slf4j.Logger;
