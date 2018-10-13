@@ -36,7 +36,7 @@ public class CreditCardController {
 
         User user = ((MyUserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser();
-        Wallet wallet = walletService.loadByUser(user);
+        Wallet wallet = walletService.loadByUserId(user.getId());
         account.setWallet(wallet);
         CreditCard savedAcct = creditCardService.save(account);
         log.info("Saved user (ID {}) credit card (ID {}) '{}' ", user.getId(),

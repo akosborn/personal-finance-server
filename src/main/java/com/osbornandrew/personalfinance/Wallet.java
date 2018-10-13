@@ -1,15 +1,12 @@
 package com.osbornandrew.personalfinance;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.osbornandrew.personalfinance.accounts.*;
-import com.osbornandrew.personalfinance.transactions.Expense;
-import com.osbornandrew.personalfinance.transactions.Income;
+import com.osbornandrew.personalfinance.accounts.Account;
 import com.osbornandrew.personalfinance.users.User;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity

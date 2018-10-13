@@ -37,14 +37,13 @@ public class CheckingController {
     @PostMapping("")
     public Set<CheckingAccount> postAccount(@RequestBody CheckingAccount account) {
 
-        User user = ((MyUserDetails) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal()).getUser();
-        Wallet wallet = walletService.loadByUser(user);
-        account.setWallet(wallet);
+        Long userId = ((MyUserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUser().getId();
+        account.setWallet(walletService.loadByUserId(userId));
         CheckingAccount savedAcct = (CheckingAccount) acctService.save(account);
-        log.info("Saved user (ID {}) checking account (ID {}) '{}' ", user.getId(),
+        log.info("Saved user (ID {}) checking account (ID {}) '{}' ", userId,
                 savedAcct.getId(), savedAcct.getName());
 
-        return checkingService.loadByUser(user);
+        return checkingService.loadByUserId(userId);
     }
 }

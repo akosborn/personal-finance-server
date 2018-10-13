@@ -36,7 +36,7 @@ public class LoanController {
 
         User user = ((MyUserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser();
-        Wallet wallet = walletService.loadByUser(user);
+        Wallet wallet = walletService.loadByUserId(user.getId());
         account.setWallet(wallet);
         Loan savedAcct = loanService.save(account);
         log.info("Saved user (ID {}) loan (ID {}) '{}' ", user.getId(),

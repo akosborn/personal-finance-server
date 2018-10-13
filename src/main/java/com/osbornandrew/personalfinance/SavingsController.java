@@ -37,7 +37,7 @@ public class SavingsController {
 
         User user = ((MyUserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser();
-        Wallet wallet = walletService.loadByUser(user);
+        Wallet wallet = walletService.loadByUserId(user.getId());
         account.setWallet(wallet);
         SavingsAccount savedAcct = savingsService.save(account);
         log.info("Saved user (ID {}) savings account (ID {}) '{}' ", user.getId(),
