@@ -1,6 +1,5 @@
 package com.osbornandrew.personalfinance;
 
-import com.osbornandrew.personalfinance.AccountRepository;
 import com.osbornandrew.personalfinance.accounts.Account;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,11 @@ public class AccountService {
         return repo.save(account);
     }
 
-    public Account loadByUserAndId(Long id, Long userId) {
-        return repo.findByIdAndWallet_User_Id(id, userId);
+    public Account loadByIdAndUserId(Long acctId, Long userId) {
+        return repo.findByIdAndWallet_User_Id(acctId, userId);
+    }
+
+    public void deleteById(Long id) {
+        repo.deleteById(id);
     }
 }

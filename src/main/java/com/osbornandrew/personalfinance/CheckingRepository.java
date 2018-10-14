@@ -10,5 +10,5 @@ import java.util.Set;
 @Repository
 public interface CheckingRepository extends CrudRepository<CheckingAccount, Long> {
 
-    Set<CheckingAccount> findAllByWallet_User(User user);
+    Set<CheckingAccount> findAllByWallet_User_Id(Long id);
 }

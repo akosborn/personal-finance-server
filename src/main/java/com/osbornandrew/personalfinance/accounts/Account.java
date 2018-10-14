@@ -1,6 +1,8 @@
 package com.osbornandrew.personalfinance.accounts;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.osbornandrew.personalfinance.Wallet;
 import com.osbornandrew.personalfinance.transactions.Expense;
 import com.osbornandrew.personalfinance.transactions.Income;
@@ -12,13 +14,21 @@ import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = CheckingAccount.class, name = "CHECKING"),
+        @JsonSubTypes.Type(value = CreditCard.class, name = "CREDIT_CARD"),
+        @JsonSubTypes.Type(value = Investment.class, name = "INVESTMENT"),
+        @JsonSubTypes.Type(value = Loan.class, name = "LOAN"),
+        @JsonSubTypes.Type(value = SavingsAccount.class, name = "SAVINGS")
+})
 public abstract class Account {
 
     @Getter
     private AccountType type;
 
     @ManyToOne
-    @JsonIgnoreProperties({"checkingAccounts", "savingsAccounts", "creditCards", "loans", "investments"})
+    @JsonIgnoreProperties({"accounts"})
     @Getter @Setter
     private Wallet wallet;
 

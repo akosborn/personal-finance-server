@@ -37,7 +37,7 @@ public class InvestmentController {
 
         User user = ((MyUserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser();
-        Wallet wallet = walletService.loadByUser(user);
+        Wallet wallet = walletService.loadByUserId(user.getId());
         account.setWallet(wallet);
         Investment savedAcct = investmentService.save(account);
         log.info("Saved user (ID {}) investment (ID {}) '{}' ", user.getId(),

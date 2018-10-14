@@ -21,7 +21,7 @@ public class CheckingService {
         return repo.save(account);
     }
 
-    public Set<CheckingAccount> loadByUser(User user) {
-        return repo.findAllByWallet_User(user);
+    public Set<CheckingAccount> loadByUserId(Long id) {
+        return repo.findAllByWallet_User_Id(id);
     }
 }

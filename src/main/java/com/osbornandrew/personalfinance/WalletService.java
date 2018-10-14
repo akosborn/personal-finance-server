@@ -1,6 +1,5 @@
 package com.osbornandrew.personalfinance;
 
-import com.osbornandrew.personalfinance.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +19,8 @@ public class WalletService {
         return repo.findById(id);
     }
 
-    public Wallet loadByUser(User user) {
-        return repo.findByUser(user);
+    public Wallet loadByUserId(Long id) {
+        return repo.findByUser_Id(id);
     }
 
     public Wallet save(Wallet wallet) {
