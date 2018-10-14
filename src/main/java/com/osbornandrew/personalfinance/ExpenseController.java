@@ -34,7 +34,7 @@ public class ExpenseController {
     public Expense postExpense(@PathVariable(value = "acctId") Long acctId,
                                @RequestBody Expense expense) {
 
-        Account account = acctService.loadByUserAndId(
+        Account account = acctService.loadByIdAndUserId(
                 acctId,
                 ((MyUserDetails) SecurityContextHolder.getContext()
                         .getAuthentication().getPrincipal()).getUser().getId());
