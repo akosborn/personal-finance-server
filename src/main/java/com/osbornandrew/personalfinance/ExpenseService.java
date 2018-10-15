@@ -17,4 +17,12 @@ public class ExpenseService {
     public Expense save(Expense expense) {
         return repo.save(expense);
     }
+
+    public Expense loadByIdAndUserId(Long acctId, Long userId) {
+        return repo.findByIdAndAccount_Wallet_User_Id(acctId, userId);
+    }
+
+    public void deleteById(Long id) {
+        repo.deleteById(id);
+    }
 }

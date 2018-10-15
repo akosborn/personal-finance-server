@@ -7,10 +7,7 @@ import com.osbornandrew.personalfinance.accounts.Account;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -20,6 +17,9 @@ public class Expense {
     @GeneratedValue
     @Getter @Setter
     private Long id;
+
+    @Transient
+    private Long accountId;
 
     @Getter @Setter
     private LocalDate date;
@@ -52,5 +52,9 @@ public class Expense {
         this.date = date;
         this.description = description;
         this.amount = amount;
+    }
+
+    public Long getAccountId() {
+        return account.getId();
     }
 }
