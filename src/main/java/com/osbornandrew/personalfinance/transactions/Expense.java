@@ -31,7 +31,7 @@ public class Expense {
     private double amount;
 
     @ManyToOne
-    @JsonIgnoreProperties({"expenses"})
+    @JsonIgnoreProperties({"expenses", "incomes", "balance", "description"})
     @Getter @Setter
     private Account account;
 

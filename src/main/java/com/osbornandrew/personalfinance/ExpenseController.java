@@ -28,7 +28,7 @@ public class ExpenseController {
         this.expService = expService;
     }
 
-    @PostMapping("/accounts/{acctId}")
+    @PostMapping("/accounts/{acctId}/expenses")
     public Expense postExpense(@PathVariable(value = "acctId") Long acctId,
                                @RequestBody Expense expense) {
 
@@ -39,7 +39,7 @@ public class ExpenseController {
         // TODO: 10/14/2018 Handle not finding account
         expense.setAccount(account);
         Expense savedExp = expService.save(expense);
-        log.info("Saved Expense {} for User {}", savedExp, userId);
+        log.info("Saved Expense {} for User {}", savedExp.getId(), userId);
 
         return savedExp;
     }

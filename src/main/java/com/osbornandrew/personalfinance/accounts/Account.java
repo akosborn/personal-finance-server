@@ -47,7 +47,6 @@ public abstract class Account {
     private double balance;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties({"account"})
     @Getter @Setter
     private Set<Expense> expenses;
 
