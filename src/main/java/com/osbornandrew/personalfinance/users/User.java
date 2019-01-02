@@ -1,6 +1,7 @@
 package com.osbornandrew.personalfinance.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.osbornandrew.personalfinance.Budget;
 import com.osbornandrew.personalfinance.Wallet;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,4 +53,9 @@ public class User {
     @JsonIgnoreProperties({"user"})
     @Getter @Setter
     private Wallet wallet;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"user"})
+    @Getter @Setter
+    private Budget budget;
 }
