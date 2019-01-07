@@ -17,11 +17,17 @@ public class Budget {
     private Long id;
 
     @OneToOne
-    @JsonIgnoreProperties({"budget"})
+    @JsonIgnoreProperties({"budget", "wallet"})
     @Getter @Setter
     private User user;
 
-    @OneToMany(mappedBy = "budget")
+    @OneToMany(mappedBy = "budget", fetch = FetchType.EAGER)
     @Getter @Setter
     List<BudgetItem> items;
+
+    public Budget(){}
+
+    public Budget(User user){
+        this.user = user;
+    }
 }
