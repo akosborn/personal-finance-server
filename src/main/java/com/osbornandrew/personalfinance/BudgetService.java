@@ -1,5 +1,6 @@
 package com.osbornandrew.personalfinance;
 
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +17,10 @@ public class BudgetService {
     }
 
     public Budget loadByIdAndUserId(Long budgetId, Long userId) {
-        return repo.findByIdAndUser_Id(budgetId, userId);
+        Budget budget = repo.findByIdAndUser_Id(budgetId, userId);
+        Hibernate.initialize(budget.getFixedExpenses());
+        Hibernate.initialize(budget.getItems());
+        return budget;
     }
 
     public void deleteById(Long id) {

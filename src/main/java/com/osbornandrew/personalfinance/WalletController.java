@@ -3,6 +3,7 @@ package com.osbornandrew.personalfinance;
 import com.osbornandrew.personalfinance.users.MyUserDetails;
 import com.osbornandrew.personalfinance.users.MyUserService;
 import com.osbornandrew.personalfinance.users.User;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ public class WalletController
                     user.getDisplayName(), user.getId());
         }
 
+//        Hibernate.initialize(wallet.getUser().getBudget().getFixedExpenses());
         return wallet;
 
 //        Set<CheckingAccount> checkingAccts = new LinkedHashSet<>();

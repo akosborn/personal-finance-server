@@ -3,6 +3,7 @@ package com.osbornandrew.personalfinance;
 import com.osbornandrew.personalfinance.users.MyUserDetails;
 import com.osbornandrew.personalfinance.users.MyUserService;
 import com.osbornandrew.personalfinance.users.User;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class BudgetController {
     @RequestMapping("")
     public Budget getBudget(){
         User user = ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-        Budget budget = user.getBudget();
+        Budget budget = budgetService.loadByIdAndUserId(user.getBudget().getId(), user.getId());
         // Create new budget for user if user doesn't have one
         if (budget == null) {
             user.setBudget(new Budget(user));

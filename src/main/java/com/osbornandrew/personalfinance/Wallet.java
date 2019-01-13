@@ -17,7 +17,7 @@ public class Wallet {
     private Long id;
 
     @OneToOne
-    @JsonIgnoreProperties({"wallet"})
+    @JsonIgnoreProperties({"wallet", "budget"})
     @Getter @Setter
     private User user;
 

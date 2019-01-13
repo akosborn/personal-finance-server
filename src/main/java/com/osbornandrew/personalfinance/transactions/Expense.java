@@ -3,6 +3,7 @@ package com.osbornandrew.personalfinance.transactions;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.osbornandrew.personalfinance.Budget;
 import com.osbornandrew.personalfinance.accounts.Account;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,20 +36,28 @@ public class Expense {
     @Getter @Setter
     private Account account;
 
+    @ManyToOne
+    @JsonIgnoreProperties({"fixedExpenses", "items"})
+    private Budget budget;
+
+    private Frequency frequency;
+
     public Expense() { }
 
     @JsonCreator
     public Expense(@JsonProperty("date") String date,
                    @JsonProperty("description") String description,
-                   @JsonProperty("amount") double amount) {
+                   @JsonProperty("amount") double amount,
+                   @JsonProperty("frequency") int frequency) {
         // TODO: 10/12/2018 Parse actual date once client side pattern is defined
         this.date = LocalDate.now();
         this.description = description;
         this.amount = amount;
+        this.frequency = Frequency.values()[frequency]; // TODO: 1/13/2019 Handle IndexOutOfBoundsException
+        // TODO: 1/13/2019 Set date
     }
 
     public Expense(LocalDate date, String description, double amount) {
-
         this.date = date;
         this.description = description;
         this.amount = amount;

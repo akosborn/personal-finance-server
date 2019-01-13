@@ -17,7 +17,7 @@ public class BudgetItem {
     private Long id;
 
     @ManyToOne
-    @JsonIgnoreProperties({"items"})
+    @JsonIgnoreProperties({"items", "fixedExpenses"})
     @Getter @Setter
     private Budget budget;
 

@@ -32,19 +32,16 @@ public class AccountController {
 
     @PostMapping("")
     public Account postAccount(@RequestBody Account account) {
-
         Long userId = ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal()).getUser().getId();
         account.setWallet(walletService.loadByUserId(userId));
         Account savedAcct = acctService.save(account);
         log.info("Saved User {} Account {}: '{}' ", userId, savedAcct.getId(), savedAcct.getName());
-
         return savedAcct;
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteAccount(@PathVariable("id") Long acctId) {
-
         Long userId = ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal()).getUser().getId();
         ResponseEntity response;
@@ -60,7 +57,6 @@ public class AccountController {
                     Collections.singletonMap("message", "Account " + acctId + " not found."));
             log.info("Account {} for User {} could not be deleted. Not found.", acctId, userId);
         }
-
         return response;
     }
 }
