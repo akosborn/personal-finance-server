@@ -18,4 +18,8 @@ public class BudgetItemService {
     public void deleteById(Long id) {
         repo.deleteById(id);
     }
+
+    public BudgetItem findByUserAndId(Long userId, Long itemId){
+        return repo.findByBudget_User_IdAndId(userId, itemId);
+    }
 }

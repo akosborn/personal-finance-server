@@ -6,9 +6,13 @@ import com.osbornandrew.personalfinance.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
 
 @Secured("ROLE_USER")
 @RestController
@@ -67,5 +71,28 @@ public class BudgetController {
         BudgetItem savedItem = budgetItemService.save(item);
         log.info("Saved user (ID {}) budget item (ID {})", user.getId(), savedItem.getId());
         return savedItem;
+    }
+
+    @DeleteMapping("/{budgetId}/items/{itemId}")
+    public ResponseEntity deleteBudgetItem(@PathVariable("budgetId") Long budgetId,
+                                           @PathVariable("itemId") Long itemId) {
+        // budgetId isn't currently used since itemId is guaranteed to be unique. Using for client clarity.
+        Long userId = ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal()).getUser().getId();
+        ResponseEntity response;
+        // Ensure that item exists as one of the user's
+        if (budgetItemService.findByUserAndId(userId, itemId) != null) {
+            budgetItemService.deleteById(itemId);
+            log.info("BudgetItem {} for User {} successfully deleted.", itemId, userId);
+            response = ResponseEntity.ok(
+                    Collections.singletonMap("message", "BudgetItem " + itemId + " was successfully deleted"));
+        }
+        else {
+            response = ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Collections.singletonMap("message", "BudgetItem " + itemId + " not found."));
+            log.info("BudgetItem {} for User {} could not be deleted. Not found.", itemId, userId);
+        }
+
+        return response;
     }
 }
