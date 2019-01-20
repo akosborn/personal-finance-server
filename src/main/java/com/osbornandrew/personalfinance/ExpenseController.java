@@ -2,6 +2,7 @@ package com.osbornandrew.personalfinance;
 
 import com.osbornandrew.personalfinance.accounts.Account;
 import com.osbornandrew.personalfinance.transactions.Expense;
+import com.osbornandrew.personalfinance.transactions.Frequency;
 import com.osbornandrew.personalfinance.users.MyUserDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -31,7 +33,6 @@ public class ExpenseController {
     @PostMapping("/accounts/{acctId}/expenses")
     public Expense postExpense(@PathVariable(value = "acctId") Long acctId,
                                @RequestBody Expense expense) {
-
         Long userId = ((MyUserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUser().getId();
         Account account = acctService.loadByIdAndUserId(
@@ -47,7 +48,6 @@ public class ExpenseController {
     @DeleteMapping("accounts/{acctId}/expenses/{expId}")
     public ResponseEntity deleteAccount(@PathVariable("acctId") Long acctId,
                                         @PathVariable("expId") Long expId) {
-
         Long userId = ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal()).getUser().getId();
         ResponseEntity response;
@@ -63,7 +63,14 @@ public class ExpenseController {
                     Collections.singletonMap("message", "Expense " + expId + " not found."));
             log.info("Expense {} for User {} could not be deleted. Not found.", expId, userId);
         }
-
         return response;
+    }
+
+    @RequestMapping("fixed")
+    public List<Expense> getFixedExpenses(){
+        Long userId = ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal()).getUser().getId();
+        List<Expense> monthlyFixedExpenses = expService.loadFixedByUserIdAndFrequency(userId, Frequency.MONTHLY);
+        return monthlyFixedExpenses;
     }
 }

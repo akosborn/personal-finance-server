@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.osbornandrew.personalfinance.Budget;
+import com.osbornandrew.personalfinance.Category;
 import com.osbornandrew.personalfinance.accounts.Account;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,7 +41,15 @@ public class Expense {
     @JsonIgnoreProperties({"fixedExpenses", "items"})
     private Budget budget;
 
+    @Getter @Setter
     private Frequency frequency;
+
+    @Getter @Setter
+    private int fixedDayOfMonth;
+
+    @Getter @Setter
+    @ManyToOne
+    private Category category;
 
     public Expense() { }
 
@@ -61,6 +70,17 @@ public class Expense {
         this.date = date;
         this.description = description;
         this.amount = amount;
+    }
+
+    public Expense(int fixedDayOfMonth, String description, double amount, Account account,
+                   Frequency frequency, Budget budget, Category category) {
+        this.fixedDayOfMonth = fixedDayOfMonth;
+        this.description = description;
+        this.amount = amount;
+        this.account = account;
+        this.frequency = frequency;
+        this.budget = budget;
+        this.category = category;
     }
 
     public Long getAccountId() {

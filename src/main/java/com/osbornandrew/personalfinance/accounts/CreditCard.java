@@ -22,6 +22,9 @@ public class CreditCard extends Account {
     @Getter @Setter
     private float interestRate;
 
+    @Getter @Setter
+    private int dueDay;
+
     public CreditCard() {
         super();
     }
@@ -32,11 +35,12 @@ public class CreditCard extends Account {
                       @JsonProperty("balance") double balance,
                       @JsonProperty("limitAmt") double limitAmt,
                       @JsonProperty("minPayment") double minPayment,
-                      @JsonProperty("interestRate") float interestRate) {
-
+                      @JsonProperty("interestRate") float interestRate,
+                      @JsonProperty("dueDay") int dueDay) {
         super(name, description, balance, AccountType.CREDIT_CARD);
         this.limitAmt = limitAmt;
         this.minPayment = minPayment;
         this.interestRate = interestRate;
+        this.dueDay = dueDay;
     }
 }
