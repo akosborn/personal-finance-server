@@ -1,13 +1,14 @@
 package com.osbornandrew.personalfinance.accounts;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.osbornandrew.personalfinance.util.Debt;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
 
 @Entity
-public class Loan extends Account {
+public class Loan extends Account implements Debt {
 
     public Loan() { }
 
