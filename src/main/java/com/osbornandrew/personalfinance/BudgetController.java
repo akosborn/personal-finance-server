@@ -1,5 +1,7 @@
 package com.osbornandrew.personalfinance;
 
+import com.osbornandrew.personalfinance.accounts.Account;
+import com.osbornandrew.personalfinance.transactions.Expense;
 import com.osbornandrew.personalfinance.users.MyUserDetails;
 import com.osbornandrew.personalfinance.users.MyUserService;
 import com.osbornandrew.personalfinance.users.User;
@@ -26,16 +28,22 @@ public class BudgetController {
     private BudgetItemService budgetItemService;
     private MyUserService userService;
     private CategoryService categoryService;
+    private ExpenseService expService;
+    private AccountService accountService;
 
     @Autowired
     public BudgetController(BudgetService budgetService,
                             MyUserService userService,
                             BudgetItemService budgetItemService,
-                            CategoryService categoryService) {
+                            CategoryService categoryService,
+                            ExpenseService expService,
+                            AccountService accountService) {
         this.budgetService = budgetService;
         this.userService = userService;
         this.budgetItemService = budgetItemService;
         this.categoryService = categoryService;
+        this.expService = expService;
+        this.accountService = accountService;
     }
 
     @RequestMapping("")
@@ -95,5 +103,25 @@ public class BudgetController {
         }
 
         return response;
+    }
+
+    @PostMapping("/{budgetId}/fixed-expense")
+    public Expense postFixedExpense(@PathVariable("budgetId") Long budgetId,
+                                     @RequestBody Expense expense) {
+        User user = ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+        Budget budget = budgetService.loadByIdAndUserId(budgetId, user.getId());
+
+        expense.setBudget(budget); // TODO: 1/20/2019 Probably want to move this to the JsonCreator constructor
+        expense.setAccount(accountService.loadByIdAndUserId(expense.getId(), user.getId()));
+        expense.setCategory(categoryService.findByName(expense.getCategoryName()));
+        Expense savedExp = expService.save(expense);
+        budget.getFixedExpenses().add(expense);
+
+        BudgetItem item = new BudgetItem(expense.getCategory(), expense.getDescription(), expense.getAmount(),
+                expense.getBudget());
+        BudgetItem savedItem = budgetItemService.save(item);
+        budget.getItems().add(savedItem);
+
+        return savedExp;
     }
 }

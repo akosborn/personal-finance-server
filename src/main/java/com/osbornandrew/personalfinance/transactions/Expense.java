@@ -21,6 +21,7 @@ public class Expense {
     private Long id;
 
     @Transient
+    @Getter @Setter
     private Long accountId;
 
     @Getter @Setter
@@ -39,6 +40,7 @@ public class Expense {
 
     @ManyToOne
     @JsonIgnoreProperties({"fixedExpenses", "items"})
+    @Getter @Setter
     private Budget budget;
 
     @Getter @Setter
@@ -51,18 +53,26 @@ public class Expense {
     @ManyToOne
     private Category category;
 
+    @Transient
+    @Getter @Setter
+    private String categoryName;
+
     public Expense() { }
 
     @JsonCreator
     public Expense(@JsonProperty("date") String date,
                    @JsonProperty("description") String description,
                    @JsonProperty("amount") double amount,
-                   @JsonProperty("frequency") int frequency) {
+                   @JsonProperty("frequency") int frequency,
+                   @JsonProperty("accountId") Long accountId,
+                   @JsonProperty("category") String categoryName) {
         // TODO: 10/12/2018 Parse actual date once client side pattern is defined
         this.date = LocalDate.now();
         this.description = description;
         this.amount = amount;
         this.frequency = Frequency.values()[frequency]; // TODO: 1/13/2019 Handle IndexOutOfBoundsException
+        this.accountId = accountId;
+        this.categoryName = categoryName;
         // TODO: 1/13/2019 Set date
     }
 
@@ -81,9 +91,5 @@ public class Expense {
         this.frequency = frequency;
         this.budget = budget;
         this.category = category;
-    }
-
-    public Long getAccountId() {
-        return account.getId();
     }
 }

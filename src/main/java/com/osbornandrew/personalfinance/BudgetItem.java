@@ -46,4 +46,11 @@ public class BudgetItem {
         this.description = description;
         this.amount = amount;
     }
+
+    public BudgetItem(Category category, String description, double amount, Budget budget){
+        this.category = category;
+        this.description = description;
+        this.amount = amount;
+        this.budget = budget;
+    }
 }
