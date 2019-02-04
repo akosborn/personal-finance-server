@@ -1,26 +1,19 @@
 package com.osbornandrew.personalfinance.util;
 
-import com.osbornandrew.personalfinance.accounts.Account;
 import com.osbornandrew.personalfinance.accounts.CreditCard;
+import com.osbornandrew.personalfinance.accounts.Debt;
 import com.osbornandrew.personalfinance.accounts.Loan;
-import lombok.Getter;
-import lombok.Setter;
+import com.osbornandrew.personalfinance.repayment.AccountPaymentSchedule;
+import com.osbornandrew.personalfinance.repayment.PaymentPlan;
+import com.osbornandrew.personalfinance.repayment.PaymentRecord;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class RepaymentCalculator {
 
     private static DecimalFormat df = new DecimalFormat("#.00");
-    private Map<Debt, List<PaymentRecord>> plan = new LinkedHashMap<>();
-    private double totalInterestPaid = 0;
-    private double totalBalance = 0;
-
-    @Getter @Setter
-    private double budget;
 
     public static void main(String[] args) {
         Loan personal = new Loan("Discover", "personal", 6000, 184, 11f, 1);
@@ -29,58 +22,59 @@ public class RepaymentCalculator {
         accounts.add(personal);
         accounts.add(cc);
 
-        RepaymentCalculator calculator = new RepaymentCalculator(500);
-        if (calculator.getBudget() == 0){
-            for (Debt debt : accounts) {
-                calculator.setBudget(calculator.getBudget() + debt.getMinPayment());
-            }
-        }
-        Map<Debt, List<PaymentRecord>> avalanche = calculator.buildAvalanchePlan(accounts);
-
-        accounts = new ArrayList<>();
-        personal = new Loan("Discover", "personal", 6000, 184, 11f, 1);
-        cc = new CreditCard("Citi", "meh", 900, 5000, 25, 19.5f, 1);
-        accounts.add(personal);
-        accounts.add(cc);
-        calculator = new RepaymentCalculator(500);
-        Map<Debt, List<PaymentRecord>> snowball = calculator.buildSnowballPlan(accounts);
+        PaymentPlan avalanche = RepaymentCalculator.buildAvalanchePlan(accounts);
+        PaymentPlan snowball = RepaymentCalculator.buildSnowballPlan(accounts);
     }
 
-    public RepaymentCalculator(double budget) {
-        this.budget = budget;
-    }
-
-    public Map<Debt, List<PaymentRecord>> buildSnowballPlan(List<Debt> accounts){
+    /**
+     * Generates a payment plan based on the snowball debt payment plan.
+     *
+     * @param  accounts List of accounts implementing Debt interface
+     * @return PaymentPlan
+     */
+    public static PaymentPlan buildSnowballPlan(List<Debt> accounts){
         // Sort by highest balance
         accounts.sort((o1, o2) -> Double.compare(o2.getBalance(), o1.getBalance()));
-        setupPaymentPlan(accounts);
-        return plan;
+        return buildSnowballPlan(accounts, sumMinPayments(accounts, 0, accounts.size()));
     }
 
-    public Map<Debt, List<PaymentRecord>> buildAvalanchePlan(List<Debt> accounts){
+    public static PaymentPlan buildSnowballPlan(List<Debt> accounts, double budget){
+        // Sort by highest balance
+        accounts.sort((o1, o2) -> Double.compare(o2.getBalance(), o1.getBalance()));
+        return setupPaymentPlan(accounts, budget);
+    }
+
+    public static PaymentPlan buildAvalanchePlan(List<Debt> accounts){
+        return buildAvalanchePlan(accounts, sumMinPayments(accounts, 0, accounts.size()));
+    }
+
+    public static PaymentPlan buildAvalanchePlan(List<Debt> accounts, double budget){
         // Sort by highest interest rate
         accounts.sort((o1, o2) -> Float.compare(o2.getInterestRate(), o1.getInterestRate()));
-        setupPaymentPlan(accounts);
-        return plan;
+        return setupPaymentPlan(accounts, budget);
     }
 
-    private void setupPaymentPlan(List<Debt> accounts){
+    private static PaymentPlan setupPaymentPlan(List<Debt> accounts, double budget){
+        PaymentPlan plan = new PaymentPlan(budget, sumTotalBalance(accounts, 0, accounts.size()));
         for (Debt debt : accounts){
-            totalBalance += debt.getBalance();
-            plan.put(debt, new ArrayList<>());
+            plan.getSchedules().add(new AccountPaymentSchedule(debt));
         }
 
         double excess = budget - sumMinPayments(accounts, 0, accounts.size());
-        payMonth(0, accounts, excess, 0);
+        return payMonth(0, plan, excess, 0, budget);
     }
 
-    public void payMonth(int start, List<Debt> accounts, double excess, int month){
-        for (int acctIndex = start; acctIndex < accounts.size(); acctIndex++){
-            Debt debt = accounts.get(acctIndex);
-            float monthlyRate = (debt.getInterestRate() / 12) / 100;
-            double interest = debt.getBalance() * monthlyRate;
-            totalInterestPaid += interest;
-            double balance = debt.getBalance() + interest;
+    private static PaymentPlan payMonth(int start, PaymentPlan plan, double excess, int month, double budget){
+        for (int acctIndex = start; acctIndex < plan.getSchedules().size(); acctIndex++){
+            AccountPaymentSchedule schedule = plan.getSchedules().get(acctIndex);
+            Debt debt = schedule.getAccount();
+
+            double lastBalance = schedule.getPaymentRecords().size() > 0 ? schedule.getPaymentRecords().get(schedule.getPaymentRecords().size() - 1).getBalance() : debt.getBalance();
+            double interest = lastBalance * debt.getMonthlyInterestRate();
+            schedule.addInterest(interest);
+            plan.addInterest(interest);
+
+            double balance = lastBalance + interest;
             double payment = debt.getMinPayment();
 
             if (excess > 0){ // Can pay higher than min on at least one account
@@ -101,23 +95,21 @@ public class RepaymentCalculator {
             }
             double principalPaid = payment - interest;
             balance -= payment;
-            ((Account) debt).setBalance(balance);
             PaymentRecord record = new PaymentRecord(month, payment, balance, interest, principalPaid);
-            plan.get(debt).add(record);
-//            System.out.println(record.toString());
+            schedule.getPaymentRecords().add(record);
         }
         month++;
 
-//        System.out.println();
-
-        excess = budget - sumMinPayments(accounts, start, accounts.size());
-        if (start != accounts.size()){
-            payMonth(start, accounts, excess, month);
+        excess = budget - sumMinPayments(start, plan.getSchedules().size(), plan.getSchedules());
+        if (start != plan.getSchedules().size()){
+            payMonth(start, plan, excess, month, budget);
         }
         else {
-            System.out.println("You paid off your total balance of $" + df.format(totalBalance) + " in " + month + 1 + " months! You paid $" + df.format(totalInterestPaid)
+            System.out.println("You paid off your total balance of $" + df.format(plan.getTotalBalance()) +
+                    " in " + (month + 1) + " months! You paid $" + df.format(plan.getTotalInterestPaid())
                     + " in interest :(");
         }
+        return plan;
     }
 
     private static double sumMinPayments(List<Debt> accounts, int start, int end) {
@@ -128,56 +120,19 @@ public class RepaymentCalculator {
         return sum;
     }
 
-    public static void calculatePaymentDuration(Debt debt, double payment){
-        final float monthlyRate = (debt.getInterestRate() / 12) / 100;
-        double balanceRemaining = debt.getBalance();
-        double totalInterest = 0;
-        if (payment == 0){
-            payment = debt.getMinPayment();
+    private static double sumMinPayments(int start, int end, List<AccountPaymentSchedule> acctSchedules) {
+        double sum = 0;
+        for (int i = start; i < end; i++){
+            sum += acctSchedules.get(i).getAccount().getMinPayment();
         }
+        return sum;
+    }
 
-        int month = 0;
-        while (balanceRemaining >= payment){ // One iteration per month
-            double interest = balanceRemaining * monthlyRate;
-            totalInterest += interest;
-
-            balanceRemaining += interest;
-            balanceRemaining -= payment;
-
-            double principalPaid = payment - interest;
-
-//            System.out.println("Month " + month);
-//            System.out.println("balanceRemaining = [$" + df.format(balanceRemaining) +
-//                    "], payment = [$" + df.format(payment) + "], interestForMonth = [$" + df.format(interest) + "], principalPaid = [$" +
-//                    df.format(principalPaid) + "]");
-//            System.out.println();
-
-            month++;
+    private static double sumTotalBalance(List<Debt> accounts, int start, int end) {
+        double sum = 0;
+        for (int i = start; i < end; i++){
+            sum += accounts.get(i).getBalance();
         }
-
-        while (balanceRemaining > 0){
-            double interest = balanceRemaining * monthlyRate;
-            double finalPayment = 0;
-            totalInterest += interest;
-
-            balanceRemaining += interest;
-            if (balanceRemaining > payment){ // Addition of the monthly interest could cause this to be true
-                balanceRemaining -= payment;
-            }
-            else {
-                finalPayment = balanceRemaining;
-                balanceRemaining = 0;
-            }
-
-//            System.out.println("Month " + month);
-//            System.out.println("balanceRemaining = [$" + df.format(balanceRemaining) +
-//                    "], payment = [$" + df.format(finalPayment) + "], interestForMonth = [$" + df.format(interest) + "]");
-//            System.out.println();
-
-            month++;
-        }
-
-        System.out.println(((Account)debt).getName() + ": At $" + df.format(payment) + "/mo, it will take " + month + 1 + " months to pay off the initial balance " +
-                "of $" + df.format(debt.getBalance()) + ". Total interest paid will be $" +  df.format(totalInterest) + ".");
+        return sum;
     }
 }
