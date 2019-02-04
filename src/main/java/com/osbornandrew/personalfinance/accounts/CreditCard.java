@@ -2,7 +2,6 @@ package com.osbornandrew.personalfinance.accounts;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.osbornandrew.personalfinance.util.Debt;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,5 +42,9 @@ public class CreditCard extends Account implements Debt {
         this.minPayment = minPayment;
         this.interestRate = interestRate;
         this.dueDay = dueDay;
+    }
+
+    public float getMonthlyInterestRate(){
+        return (interestRate / 12) / 100;
     }
 }

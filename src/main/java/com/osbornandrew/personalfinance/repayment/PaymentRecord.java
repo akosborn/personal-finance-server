@@ -1,4 +1,4 @@
-package com.osbornandrew.personalfinance.util;
+package com.osbornandrew.personalfinance.repayment;
 
 import lombok.Getter;
 import lombok.Setter;
