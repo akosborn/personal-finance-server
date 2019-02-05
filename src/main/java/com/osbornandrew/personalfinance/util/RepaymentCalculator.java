@@ -1,5 +1,6 @@
 package com.osbornandrew.personalfinance.util;
 
+import com.osbornandrew.personalfinance.accounts.Account;
 import com.osbornandrew.personalfinance.accounts.CreditCard;
 import com.osbornandrew.personalfinance.accounts.Debt;
 import com.osbornandrew.personalfinance.accounts.Loan;
@@ -15,16 +16,16 @@ public class RepaymentCalculator {
 
     private static DecimalFormat df = new DecimalFormat("#.00");
 
-    public static void main(String[] args) {
-        Loan personal = new Loan("Discover", "personal", 6000, 184, 11f, 1);
-        CreditCard cc = new CreditCard("Citi", "meh", 900, 5000, 25, 19.5f, 1);
-        List<Debt> accounts = new ArrayList<>();
-        accounts.add(personal);
-        accounts.add(cc);
-
-        PaymentPlan avalanche = RepaymentCalculator.buildAvalanchePlan(accounts);
-        PaymentPlan snowball = RepaymentCalculator.buildSnowballPlan(accounts);
-    }
+//    public static void main(String[] args) {
+//        Loan personal = new Loan("Discover", "personal", 6000, 184, 11f, 1);
+//        CreditCard cc = new CreditCard("Citi", "meh", 900, 5000, 25, 19.5f, 1);
+//        List<Debt> accounts = new ArrayList<>();
+//        accounts.add(personal);
+//        accounts.add(cc);
+//
+//        PaymentPlan avalanche = RepaymentCalculator.buildAvalanchePlan(accounts);
+//        PaymentPlan snowball = RepaymentCalculator.buildSnowballPlan(accounts);
+//    }
 
     /**
      * Generates a payment plan based on the snowball debt payment plan.
@@ -81,7 +82,9 @@ public class RepaymentCalculator {
                 if ((excess + debt.getMinPayment()) > balance){ // All of excess isn't needed
                     payment = balance;
                     excess = (excess + debt.getMinPayment()) - payment;
-                    start++; // This account is paid off
+                    if (start == acctIndex) {
+                        start++;
+                    } // This account is paid off
                 }
                 else{
                     payment += excess;
@@ -91,12 +94,19 @@ public class RepaymentCalculator {
             else if (payment > balance){ // Last payment for account
                 payment = balance;
                 excess += (debt.getMinPayment() - payment); // Roll excess over to next account payment
-                start++; // This account is paid off
+
+                // If first account in list was paid off
+                if (start == acctIndex) {
+                    start++;
+                }
+                System.out.println(((Account)debt).getName() + " $" + df.format(debt.getBalance()) + " paid off!");
             }
             double principalPaid = payment - interest;
             balance -= payment;
-            PaymentRecord record = new PaymentRecord(month, payment, balance, interest, principalPaid);
-            schedule.getPaymentRecords().add(record);
+            if (lastBalance > 0) {
+                PaymentRecord record = new PaymentRecord(month, payment, balance, interest, principalPaid);
+                schedule.getPaymentRecords().add(record);
+            }
         }
         month++;
 
