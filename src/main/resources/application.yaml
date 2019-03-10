@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost/perfi_two?autoReconnect=true&useSSL=false
     username: root
-    password: pw
+    password: Osbo_789
   jpa:
     hibernate:
       ddl-auto: update
