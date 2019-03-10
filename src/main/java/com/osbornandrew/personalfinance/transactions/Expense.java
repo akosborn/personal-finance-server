@@ -1,6 +1,7 @@
 package com.osbornandrew.personalfinance.transactions;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.osbornandrew.personalfinance.Budget;
@@ -54,8 +55,12 @@ public class Expense {
     private Category category;
 
     @Transient
-    @Getter @Setter
+    @Setter
     private String categoryName;
+
+    public String getCatName() {
+        return categoryName;
+    }
 
     public Expense() { }
 
