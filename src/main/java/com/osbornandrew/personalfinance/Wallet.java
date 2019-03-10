@@ -3,6 +3,7 @@ package com.osbornandrew.personalfinance;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.osbornandrew.personalfinance.accounts.Account;
 import com.osbornandrew.personalfinance.users.User;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,27 +11,24 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Data
 public class Wallet {
 
     @Id @GeneratedValue
-    @Getter @Setter
     private Long id;
 
     @OneToOne
     @JsonIgnoreProperties({"wallet", "budget"})
-    @Getter @Setter
     private User user;
 
-    @Getter @Setter
     private String name;
-
-    @Getter @Setter
     private String description;
 
     @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"wallet"})
-    @Getter @Setter
     private Set<Account> accounts;
+
+    private float weeklyIncome;
 
     public Wallet() { }
 

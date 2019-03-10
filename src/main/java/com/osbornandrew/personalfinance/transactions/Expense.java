@@ -54,7 +54,7 @@ public class Expense {
     private Category category;
 
     @Transient
-    @Getter @Setter
+    @Setter
     private String categoryName;
 
     public Expense() { }
@@ -91,5 +91,9 @@ public class Expense {
         this.frequency = frequency;
         this.budget = budget;
         this.category = category;
+    }
+
+    public String getCatName() {
+        return categoryName;
     }
 }

@@ -113,7 +113,7 @@ public class BudgetController {
 
         expense.setBudget(budget); // TODO: 1/20/2019 Probably want to move this to the JsonCreator constructor
         expense.setAccount(accountService.loadByIdAndUserId(expense.getId(), user.getId()));
-        expense.setCategory(categoryService.findByName(expense.getCategoryName()));
+        expense.setCategory(categoryService.findByName(expense.getCatName()));
         Expense savedExp = expService.save(expense);
         budget.getFixedExpenses().add(expense);
 
