@@ -25,4 +25,4 @@
 /.nb-gradle/
 
 ### Project-Specific ###
-/src/main/resources/application.yaml
+src/main/resources/application.yaml
