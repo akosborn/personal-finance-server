@@ -28,6 +28,7 @@ public class Wallet {
     @JsonIgnoreProperties({"wallet"})
     private Set<Account> accounts;
 
+    private float annualIncome;
     private float weeklyIncome;
 
     public Wallet() { }
