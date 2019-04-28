@@ -13,9 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.Collections;
+import java.util.Map;
 
 @Secured("ROLE_USER")
 @RestController
@@ -107,7 +110,7 @@ public class BudgetController {
 
     @PostMapping("/{budgetId}/fixed-expense")
     public Expense postFixedExpense(@PathVariable("budgetId") Long budgetId,
-                                     @RequestBody Expense expense) {
+                                    @RequestBody Expense expense) {
         User user = ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         Budget budget = budgetService.loadByIdAndUserId(budgetId, user.getId());
 
@@ -123,5 +126,21 @@ public class BudgetController {
         budget.getItems().add(savedItem);
 
         return savedExp;
+    }
+
+    @PatchMapping("/{budgetId}/items/{itemId}")
+    public BudgetItem patchBudgetItem(@PathVariable("budgetId") Long budgetId,
+                                          @PathVariable("itemId") Long itemId,
+                                          @RequestBody Map<Object, Object> partialItem) {
+        User user = ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+        BudgetItem item = budgetItemService.findByUserAndId(user.getId(), itemId);
+        // Use reflection to update only the field(s) in the request body
+        partialItem.forEach((k, v) -> {
+            Field field = ReflectionUtils.findField(BudgetItem.class, k.toString());
+            assert field != null;
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, item, v);
+        });
+        return budgetItemService.save(item);
     }
 }
