@@ -18,7 +18,6 @@ public class BudgetService {
 
     public Budget loadByIdAndUserId(Long budgetId, Long userId) {
         Budget budget = repo.findByIdAndUser_Id(budgetId, userId);
-        Hibernate.initialize(budget.getFixedExpenses());
         Hibernate.initialize(budget.getItems());
         return budget;
     }
