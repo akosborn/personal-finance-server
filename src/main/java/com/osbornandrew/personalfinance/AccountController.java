@@ -55,24 +55,18 @@ public class AccountController {
             // Create an associated fixed monthly expense
             Budget budget = account.getWallet().getUser().getBudget();
             CheckingAccount payAccount = (CheckingAccount) acctService.loadByIdAndUserId(3L, userId); // TODO: 1/14/2019 Handle this appropriately
-            Expense expense;
             BudgetItem budgetItem;
             Category category = categoryService.findByName("Debt Repayment");
             if (savedAcct.getType() == AccountType.CREDIT_CARD){
                 CreditCard cc = (CreditCard) savedAcct;
-                expense = expService.save(new Expense(cc.getDueDay(), cc.getName(), cc.getMinPayment(), payAccount,
-                                Frequency.MONTHLY, budget, category));
                 budgetItem = budgetItemService.save(new BudgetItem(category, cc.getName() + " Credit Card",
                         cc.getMinPayment(), budget));
             }
             else {
                 Loan loan = (Loan) savedAcct;
-                expense = expService.save(new Expense(loan.getDueDay(), loan.getName(), loan.getMinPayment(), payAccount,
-                                Frequency.MONTHLY, budget, category));
                 budgetItem = budgetItemService.save(new BudgetItem(category,
                         loan.getName() + " Loan", loan.getMinPayment(), budget));
             }
-            budget.getFixedExpenses().add(expense);
             budget.getItems().add(budgetItem);
             budgetService.save(budget);
         }

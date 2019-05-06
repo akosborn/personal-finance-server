@@ -27,10 +27,6 @@ public class Budget {
     @Getter @Setter
     Set<BudgetItem> items = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "budget")
-    @Getter @Setter
-    Set<Expense> fixedExpenses = new LinkedHashSet<>();
-
     public Budget(){}
 
     public Budget(User user){
