@@ -110,8 +110,8 @@ public class BudgetController {
 
     @PatchMapping("/{budgetId}/items/{itemId}")
     public BudgetItem patchBudgetItem(@PathVariable("budgetId") Long budgetId,
-                                          @PathVariable("itemId") Long itemId,
-                                          @RequestBody Map<Object, Object> partialItem) {
+                                      @PathVariable("itemId") Long itemId,
+                                      @RequestBody Map<Object, Object> partialItem) {
         User user = ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         BudgetItem item = budgetItemService.findByUserAndId(user.getId(), itemId);
         // Use reflection to update only the field(s) in the request body
