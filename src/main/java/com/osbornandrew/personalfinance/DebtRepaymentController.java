@@ -4,7 +4,6 @@ import com.osbornandrew.personalfinance.accounts.Debt;
 import com.osbornandrew.personalfinance.repayment.PaymentPlan;
 import com.osbornandrew.personalfinance.users.MyUserDetails;
 import com.osbornandrew.personalfinance.users.User;
-import com.osbornandrew.personalfinance.repayment.RepaymentCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +38,6 @@ public class DebtRepaymentController {
         List<Debt> debts = new ArrayList<>();
         debts.addAll(ccService.loadByUser(user));
         debts.addAll(loanService.loadByUser(user));
-        return RepaymentCalculator.buildAvalanchePlan(debts, 520);
+        return com.osbornandrew.personalfinance.util.RepaymentCalculator.buildAvalanchePlan(debts, 520);
     }
 }
