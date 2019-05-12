@@ -1,11 +1,10 @@
-package com.osbornandrew.personalfinance.repayment;
+package com.osbornandrew.personalfinance;
 
-import com.osbornandrew.personalfinance.CreditCardService;
-import com.osbornandrew.personalfinance.LoanService;
 import com.osbornandrew.personalfinance.accounts.Debt;
+import com.osbornandrew.personalfinance.repayment.PaymentPlan;
 import com.osbornandrew.personalfinance.users.MyUserDetails;
 import com.osbornandrew.personalfinance.users.User;
-import com.osbornandrew.personalfinance.util.RepaymentCalculator;
+import com.osbornandrew.personalfinance.repayment.RepaymentCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
