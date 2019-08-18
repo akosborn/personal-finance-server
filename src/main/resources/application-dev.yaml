@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: perfi
+  datasource:
+    url: jdbc:mysql://localhost/perfi_two?autoReconnect=true&useSSL=false
+    username: root
+    password: Osbo_789
+  jpa:
+    hibernate:
+      ddl-auto: update
+    Show-sql: false
