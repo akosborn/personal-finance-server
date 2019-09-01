@@ -9,7 +9,7 @@ Build image:
 
 Push image to Docker Hub:
 ```
-./mvnw dockerfile:push
+docker push akosborn/personal-finance-server
 ```
 
 Run container on host port 8080 and provide host env variable:
