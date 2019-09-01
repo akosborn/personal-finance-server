@@ -1,4 +1,4 @@
-package com.osbornandrew.personal.finance.server;
+package com.osbornandrew.personalfinance.finance.server;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class PersonalFinanceServerApplicationTests {
+public class ApplicationTests {
 
 	@Test
 	public void contextLoads() {
