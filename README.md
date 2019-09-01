@@ -14,5 +14,5 @@ docker push akosborn/personal-finance-server
 
 Run container on host port 8080 and provide host env variable:
 ```
-docker run -p 8080:8080 -e PERFI_PROD_DB_PWD akosborn/personal-finance-server
+docker run -d -p 8081:8080 -e PERFI_PROD_DB_PWD akosborn/personal-finance-server
 ```
