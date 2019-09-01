@@ -52,15 +52,17 @@ public class BudgetController {
     @RequestMapping("")
     public Budget getBudget(){
         User user = ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-        Budget budget = budgetService.loadByIdAndUserId(user.getBudget().getId(), user.getId());
+        Budget budget;
         // Create new budget for user if user doesn't have one
-        if (budget == null) {
+        if (user.getBudget() == null) {
             user.setBudget(new Budget(user));
             budget = userService.save(user).getBudget();
             log.info("Created budget (ID {}) for {} user {} (ID {})", budget.getId(), user.getProvider(),
                     user.getDisplayName(), user.getId());
         }
         else {
+            // Lazy initialization error if user::getBudget is used
+            budget = budgetService.loadByIdAndUserId(user.getBudget().getId(), user.getId());
             log.info("Found budget (ID {}) for {} user {} (ID {})", budget.getId(), user.getProvider(),
                     user.getDisplayName(), user.getId());
         }
