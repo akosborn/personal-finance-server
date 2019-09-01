@@ -2,16 +2,17 @@ package com.osbornandrew.personalfinance.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
+@Profile("dev") // Requests will fail in production if this configuration is enabled
 public class CorsConfig {
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
-        // TODO: 4/27/2019 Remove this before deploying to production
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
