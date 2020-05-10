@@ -9,7 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-public class CreditCard extends Account {
+public class CreditCard extends Account implements Debt {
 
     @Column(precision = 2)
     @Getter @Setter
@@ -42,5 +42,9 @@ public class CreditCard extends Account {
         this.minPayment = minPayment;
         this.interestRate = interestRate;
         this.dueDay = dueDay;
+    }
+
+    public float getMonthlyInterestRate(){
+        return (interestRate / 12) / 100;
     }
 }

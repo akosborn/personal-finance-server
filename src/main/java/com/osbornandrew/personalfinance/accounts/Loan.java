@@ -7,7 +7,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 
 @Entity
-public class Loan extends Account {
+public class Loan extends Account implements Debt {
 
     public Loan() { }
 
@@ -30,5 +30,9 @@ public class Loan extends Account {
         this.interestRate = interestRate;
         this.minPayment = minPayment;
         this.dueDay = dueDay;
+    }
+
+    public float getMonthlyInterestRate(){
+        return (interestRate / 12) / 100;
     }
 }
